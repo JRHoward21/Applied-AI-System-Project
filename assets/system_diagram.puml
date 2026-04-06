@@ -1,0 +1,50 @@
+@startuml System Diagram for Game Selector Project
+
+!define AWSPUML https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPUML/AWSCommon.puml
+
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle uml2
+
+actor User
+component "User Interface" as UI
+component "Data Collection Module" as DCM
+component "Recommendation Engine" as RE
+database "Game Database" as DB
+component "Feedback Loop" as FL
+
+' Data Flows
+User --> UI : User inputs (system, genres, favorites, history)
+UI --> DCM : Raw user data
+DCM --> RE : Processed user preferences
+RE --> DB : Query for game data
+DB --> RE : Game metadata (genres, ratings, etc.)
+RE --> UI : Personalized recommendations
+UI --> User : Display recommendations
+UI --> FL : User feedback (likes/dislikes)
+FL --> RE : Refinement data for algorithm tuning
+
+' Testing Flows
+actor "Unit Tests" as UT
+actor "Integration Tests" as IT
+actor "User Acceptance Tests" as UAT
+actor "Performance Tests" as PT
+
+UT --> DCM : Test data parsing
+UT --> RE : Test recommendation algorithms
+UT --> DB : Test data retrieval
+IT --> DCM : Test data flow to RE
+IT --> RE : Test integration with DB
+IT --> UI : Test output rendering
+UAT --> UI : Simulate user interactions
+PT --> UI : Load testing (concurrent users)
+PT --> RE : Stress test algorithms
+PT --> DB : Test large dataset handling
+
+note right of UI : Handles input/output and feedback collection
+note right of DCM : Processes and validates user inputs
+note right of RE : Core AI logic for recommendations
+note right of DB : Stores game information
+note right of FL : Improves recommendations over time
+
+@enduml
