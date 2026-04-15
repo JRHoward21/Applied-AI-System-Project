@@ -1,0 +1,51 @@
+flowchart LR
+    user([User])
+
+    subgraph presentation[Presentation Layer]
+        ui[User Interface]
+    end
+
+    subgraph application[Application Layer]
+        dcm[Data Collection Module]
+        re[Recommendation Engine]
+        fl[Feedback Loop]
+    end
+
+    subgraph data[Data Layer]
+        db[(Game Database)]
+        api[External Game APIs]
+    end
+
+    user -->|Enter system, genres, favorites, history| ui
+    ui -->|Submit raw input| dcm
+    dcm -->|Validate and normalize preferences| re
+    re -->|Query catalog and metadata| db
+    re -->|Fetch live ratings and availability| api
+    db -->|Stored game data| re
+    api -->|Live game data| re
+    re -->|Return ranked recommendations| ui
+    ui -->|Display personalized suggestions| user
+    ui -->|Collect likes and dislikes| fl
+    fl -->|Refinement signals| re
+
+    ut[[Unit Tests]] -.-> dcm
+    ut -.-> re
+    ut -.-> db
+    it[[Integration Tests]] -.-> ui
+    it -.-> dcm
+    it -.-> re
+    it -.-> db
+    uat[[User Acceptance Tests]] -.-> ui
+    pt[[Performance Tests]] -.-> ui
+    pt -.-> re
+    pt -.-> db
+
+    classDef person fill:#f6efe0,stroke:#7a5c1b,stroke-width:2px,color:#2f2412;
+    classDef layer fill:#e9f2ff,stroke:#2e5aac,stroke-width:1.5px,color:#13294b;
+    classDef datastore fill:#e8f7ee,stroke:#2c7a4b,stroke-width:1.5px,color:#163924;
+    classDef testing fill:#fff1f1,stroke:#b94a48,stroke-width:1.5px,color:#5c1f1f;
+
+    class user person;
+    class ui,dcm,re,fl,api layer;
+    class db datastore;
+    class ut,it,uat,pt testing;
