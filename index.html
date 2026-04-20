@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Selector</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h1 class="logo">Game<span>Select</span></h1>
+
+      <nav class="nav">
+        <a href="#" class="active">Discover</a>
+        <a href="#">For You</a>
+        <a href="#">Trending</a>
+        <a href="#">Genres</a>
+        <a href="#">History</a>
+      </nav>
+
+      <div class="sidebar-section">
+        <p class="section-title">Top Genres</p>
+        <div class="genre-list">
+          <span>RPG</span>
+          <span>Action</span>
+          <span>Adventure</span>
+          <span>Horror</span>
+          <span>FPS</span>
+          <span>Indie</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="hero">
+        <p class="hero-tag">PERSONALIZED DISCOVERY</p>
+        <h2>Find your next favorite game</h2>
+        <p class="hero-text">
+          A Twitch-inspired discovery experience with a Spotify-style layout.
+          Enter your system, favorite genres, favorite game, and gameplay style
+          to get personalized recommendations.
+        </p>
+      </section>
+
+      <section class="content-grid">
+        <!-- Input Panel -->
+        <div class="panel form-panel">
+          <h3>Preference Profile</h3>
+
+          <label for="system">System Type</label>
+          <select id="system">
+            <option value="">Select your system</option>
+            <option value="PC">PC</option>
+            <option value="PlayStation 5">PlayStation 5</option>
+            <option value="Xbox Series X">Xbox Series X</option>
+            <option value="Nintendo Switch">Nintendo Switch</option>
+          </select>
+
+          <label>Favorite Genres</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" value="RPG" /> RPG</label>
+            <label><input type="checkbox" value="Action" /> Action</label>
+            <label><input type="checkbox" value="Adventure" /> Adventure</label>
+            <label><input type="checkbox" value="Horror" /> Horror</label>
+            <label><input type="checkbox" value="FPS" /> FPS</label>
+            <label><input type="checkbox" value="Indie" /> Indie</label>
+          </div>
+
+          <label for="favoriteGame">Favorite Game</label>
+          <input
+            type="text"
+            id="favoriteGame"
+            placeholder="Example: The Witcher 3"
+          />
+
+          <label for="history">Gameplay History / Style</label>
+          <textarea
+            id="history"
+            rows="5"
+            placeholder="Example: I like story-driven games, open worlds, combat progression, horror, and exploration."
+          ></textarea>
+
+          <button id="generateBtn">Generate Recommendations</button>
+        </div>
+
+        <!-- Recommendation Section -->
+        <div class="panel recommendations-panel">
+          <div class="recommendation-header">
+            <h3>Recommended for You</h3>
+            <span>Based on your profile</span>
+          </div>
+
+          <div id="recommendationCards" class="recommendation-cards">
+            <!-- Cards will appear here -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
