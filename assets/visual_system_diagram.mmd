@@ -2,43 +2,45 @@ flowchart LR
     user([User])
 
     subgraph presentation[Presentation Layer]
-        ui[User Interface]
+        ui[Streamlit UI<br/>app.py]
     end
 
     subgraph application[Application Layer]
-        dcm[Data Collection Module]
-        re[Recommendation Engine]
-        fl[Feedback Loop]
+        dcm[Data collection & validation<br/>guardrails.py]
+        re[Recommender<br/>recommender.py]
+        ai[AI explanation layer<br/>ai_layer.py]
+        eval[Evaluation harness<br/>eval.py]
     end
 
     subgraph data[Data Layer]
-        db[(Game Database)]
-        api[External Game APIs]
+        games[(Local game catalog<br/>games.py)]
+        examples[Examples folder]
+        assets["Assets (diagram, images)"]
     end
 
-    user -->|Enter system, genres, favorites, history| ui
-    ui -->|Submit raw input| dcm
-    dcm -->|Validate and normalize preferences| re
-    re -->|Query catalog and metadata| db
-    re -->|Fetch live ratings and availability| api
-    db -->|Stored game data| re
-    api -->|Live game data| re
-    re -->|Return ranked recommendations| ui
-    ui -->|Display personalized suggestions| user
-    ui -->|Collect likes and dislikes| fl
-    fl -->|Refinement signals| re
+    user -->|Enter platform, genres, favorites, history| ui
+    ui -->|Submit profile| dcm
+    dcm -->|Validated profile| re
+    re -->|Top candidates| ai
+    ai -->|Explanations & rationale| ui
+    ai -->|Fact-checks against| games
+    re -->|Queries catalog| games
+    ui -->|Display suggestions| user
+    ui -->|Collect feedback| re
+    ui -->|Collect feedback| ai
+    eval -->|Load profiles| examples
+    eval -->|Invoke recommender + AI| re
 
+    %% Testing and QA
     ut[[Unit Tests]] -.-> dcm
     ut -.-> re
-    ut -.-> db
+    ut -.-> games
     it[[Integration Tests]] -.-> ui
     it -.-> dcm
     it -.-> re
-    it -.-> db
     uat[[User Acceptance Tests]] -.-> ui
     pt[[Performance Tests]] -.-> ui
     pt -.-> re
-    pt -.-> db
 
     classDef person fill:#f6efe0,stroke:#7a5c1b,stroke-width:2px,color:#2f2412;
     classDef layer fill:#e9f2ff,stroke:#2e5aac,stroke-width:1.5px,color:#13294b;
@@ -46,6 +48,6 @@ flowchart LR
     classDef testing fill:#fff1f1,stroke:#b94a48,stroke-width:1.5px,color:#5c1f1f;
 
     class user person;
-    class ui,dcm,re,fl,api layer;
-    class db datastore;
+    class ui,dcm,re,ai,eval layer;
+    class games,examples,assets datastore;
     class ut,it,uat,pt testing;
