@@ -94,6 +94,7 @@ if st.button("Generate Recommendations"):
                 with st.container(border=True):
                     st.subheader(f"{rec.get('rank', '-')}. {rec['title']}")
                     st.write(f"**Score:** {rec['score']}")
+                    st.write(f"**AI source:** {rec.get('ai_source', 'unknown')}")
                     st.write(f"**Genres:** {', '.join(rec['genres'])}")
                     st.write(f"**Platforms:** {', '.join(rec['platforms'])}")
                     st.write(f"**Base reason:** {rec['reason']}")

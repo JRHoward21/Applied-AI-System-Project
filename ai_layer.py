@@ -1,9 +1,12 @@
 import os
+import json
 from typing import Dict, List
+
+from openai import OpenAI
 
 
 def build_profile_summary(user_prefs: Dict) -> str:
-    system = user_prefs.get("system", "Unknown")
+    system = user_prefs.get("system", "Unknown") or "Unknown"
     genres = ", ".join(user_prefs.get("genres", [])) or "None provided"
     favorite_game = user_prefs.get("favorite_game", "") or "None provided"
     history = user_prefs.get("history", "") or "None provided"
@@ -31,6 +34,82 @@ def local_ai_explanations(user_prefs: Dict, recommendations: List[Dict]) -> List
         updated = dict(rec)
         updated["ai_reason"] = enhanced_reason
         updated["rank"] = idx
+        updated["ai_source"] = "local_fallback"
+        enhanced.append(updated)
+
+    return enhanced
+
+
+def build_catalog_payload(recommendations: List[Dict]) -> List[Dict]:
+    payload = []
+    for rec in recommendations:
+        payload.append(
+            {
+                "title": rec["title"],
+                "score": rec["score"],
+                "genres": rec["genres"],
+                "platforms": rec["platforms"],
+                "reason": rec["reason"],
+                "matched_features": rec.get("matched_features", []),
+            }
+        )
+    return payload
+
+
+def openai_ai_explanations(user_prefs: Dict, recommendations: List[Dict]) -> List[Dict]:
+    client = OpenAI()
+
+    profile_summary = build_profile_summary(user_prefs)
+    catalog_payload = build_catalog_payload(recommendations)
+
+    prompt = f"""
+You are helping a game recommendation app explain its ranked results.
+
+User profile:
+{profile_summary}
+
+Candidate recommendations (JSON):
+{json.dumps(catalog_payload, indent=2)}
+
+Return ONLY valid JSON in this exact format:
+[
+  {{
+    "title": "string",
+    "ai_reason": "2-3 sentence personalized explanation grounded in the candidate data only"
+  }}
+]
+
+Rules:
+- Use only the provided candidate titles.
+- Do not invent games.
+- Do not change the ranking.
+- Keep explanations specific to the user's stated preferences.
+- Ground explanations in genres, platforms, matched_features, and the base reason.
+"""
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt,
+    )
+
+    text = getattr(response, "output_text", "").strip()
+    parsed = json.loads(text)
+
+    reason_map = {
+        item["title"]: item["ai_reason"]
+        for item in parsed
+        if isinstance(item, dict) and "title" in item and "ai_reason" in item
+    }
+
+    enhanced = []
+    for idx, rec in enumerate(recommendations, start=1):
+        updated = dict(rec)
+        updated["rank"] = idx
+        updated["ai_reason"] = reason_map.get(
+            rec["title"],
+            f"{rec['title']} is a strong fit based on your selected preferences and matched features."
+        )
+        updated["ai_source"] = "openai_api"
         enhanced.append(updated)
 
     return enhanced
@@ -38,8 +117,16 @@ def local_ai_explanations(user_prefs: Dict, recommendations: List[Dict]) -> List
 
 def generate_ai_recommendation_layer(user_prefs: Dict, recommendations: List[Dict]) -> List[Dict]:
     """
-    This project uses a local structured-prompt style AI layer.
-    If you later add an API key, you can extend this function.
+    Hybrid mode:
+    - If OPENAI_API_KEY is available, try the OpenAI API.
+    - If anything fails, fall back to the local structured explanation layer.
     """
-    _api_key = os.getenv("OPENAI_API_KEY")
-    return local_ai_explanations(user_prefs, recommendations)
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
+        return local_ai_explanations(user_prefs, recommendations)
+
+    try:
+        return openai_ai_explanations(user_prefs, recommendations)
+    except Exception:
+        return local_ai_explanations(user_prefs, recommendations)
