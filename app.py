@@ -41,6 +41,8 @@ if "queue" not in st.session_state:
     st.session_state.queue = []
 if "feedback" not in st.session_state:
     st.session_state.feedback = {}
+if "saved_games" not in st.session_state:
+    st.session_state.saved_games = []
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -52,6 +54,8 @@ with st.sidebar:
         st.session_state.selected_genres = []
         st.session_state.favorite_game = ""
         st.session_state.history = ""
+        # Also clear generated recommendations so users can run a fresh query
+        st.session_state.recommendations = []
     st.button("Reset Inputs", on_click=reset_inputs)
     st.markdown("**Queue**")
     for i, q in enumerate(st.session_state.queue, 1):
@@ -117,16 +121,14 @@ def render_card(rec, idx):
                     st.session_state.queue.append(t)
 
             def _save(t):
-                st.session_state.last_saved = t
+                saved = st.session_state.get("saved_games", [])
+                if t not in saved:
+                    saved.append(t)
+                st.session_state.saved_games = saved
 
-            def _share(t):
-                st.session_state.last_shared = t
-
-            btns = st.columns([1,1,1,1])
-            btns[0].button("▶ Preview", key=f"preview_{idx}", on_click=lambda t=title: st.session_state.update({"last_preview": t}))
-            btns[1].button("💾 Save", key=f"save_{idx}", on_click=_save, args=(title,))
-            btns[2].button("Share", key=f"share_{idx}", on_click=_share, args=(title,))
-            btns[3].button("+ Queue", key=f"queue_{idx}", on_click=_add_to_queue, args=(title,))
+            btns = st.columns([1,1])
+            btns[0].button("💾 Save", key=f"save_{idx}", on_click=_save, args=(title,))
+            btns[1].button("+ Queue", key=f"queue_{idx}", on_click=_add_to_queue, args=(title,))
 
             fb_cols = st.columns([1,1])
             def _up(t):
@@ -201,20 +203,36 @@ if st.button("Generate Recommendations"):
 
 # Render persisted recommendations (so card buttons work across reruns)
 final_recommendations = st.session_state.get("recommendations", [])
-if final_recommendations:
-    st.markdown("## Final Recommendations")
-    # Featured picks
-    st.markdown("### Featured Picks")
-    featured = final_recommendations[:3]
-    cols = st.columns(len(featured))
-    for c, rec in zip(cols, featured):
-        with c:
-            thumb = rec.get("thumb", "assets/default_thumb.png")
-            st.image(thumb, width=160, use_container_width=False)
-            st.markdown(f"**{rec.get('title','Unknown')}**")
-            st.markdown(f"*Score: {rec.get('score')}*")
-            st.markdown(" ".join([f"<span class='genre-chip'>{g}</span>" for g in rec.get('genres', [])]), unsafe_allow_html=True)
+tabs = st.tabs(["Recommendations", "Saved Games"]) 
+with tabs[0]:
+    if final_recommendations:
+        st.markdown("## Final Recommendations")
+        # Featured picks
+        st.markdown("### Featured Picks")
+        featured = final_recommendations[:3]
+        cols = st.columns(len(featured))
+        for c, rec in zip(cols, featured):
+            with c:
+                thumb = rec.get("thumb", "assets/default_thumb.png")
+                st.image(thumb, width=160, use_container_width=False)
+                st.markdown(f"**{rec.get('title','Unknown')}**")
+                st.markdown(f"*Score: {rec.get('score')}*")
+                st.markdown(" ".join([f"<span class='genre-chip'>{g}</span>" for g in rec.get('genres', [])]), unsafe_allow_html=True)
 
-    st.markdown("### More suggestions")
-    for i, rec in enumerate(final_recommendations, start=1):
-        render_card(rec, i)
+        st.markdown("### More suggestions")
+        for i, rec in enumerate(final_recommendations, start=1):
+            render_card(rec, i)
+    else:
+        st.info("No recommendations yet — generate to see results.")
+
+with tabs[1]:
+    st.markdown("## Saved Games")
+    saved = st.session_state.get("saved_games", [])
+    if not saved:
+        st.info("No saved games yet.")
+    else:
+        for i, title in enumerate(saved, start=1):
+            cols = st.columns([8,1])
+            cols[0].write(f"{i}. {title}")
+            if cols[1].button("Remove", key=f"remove_saved_{i}"):
+                st.session_state.saved_games.pop(i-1)

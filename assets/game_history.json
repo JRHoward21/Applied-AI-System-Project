@@ -126,5 +126,40 @@
       "favorite_game": "Minecraft",
       "history": "exploration, sandbox, action"
     }
+  },
+  {
+    "timestamp": "2026-04-22T05:00:33.961387Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "RPG",
+        "Adventure"
+      ],
+      "favorite_game": "Skyrim",
+      "history": "exploration, crafting, world building"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T05:02:44.874930Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action"
+      ],
+      "favorite_game": "Call of Duty",
+      "history": ""
+    }
+  },
+  {
+    "timestamp": "2026-04-22T05:11:56.756027Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "RPG",
+        "Action"
+      ],
+      "favorite_game": "Red Dead Redemption",
+      "history": "exploration, hardcore, fast paced, story"
+    }
   }
 ]
