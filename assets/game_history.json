@@ -161,5 +161,66 @@
       "favorite_game": "Red Dead Redemption",
       "history": "exploration, hardcore, fast paced, story"
     }
+  },
+  {
+    "timestamp": "2026-04-22T14:26:53.264843Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "RPG",
+        "FPS"
+      ],
+      "favorite_game": "Minecraft",
+      "history": "exploration"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T14:30:59.302651Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "favorite_game": "Elden Ring",
+      "history": "RPG, freeroam, open world"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T14:41:50.008767Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "FPS"
+      ],
+      "favorite_game": "Call of Duty",
+      "history": "shooting, exploration, survival"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T14:50:46.120991Z",
+    "prefs": {
+      "system": "PC",
+      "genres": [
+        "Action",
+        "RPG",
+        "Adventure",
+        "Indie"
+      ],
+      "favorite_game": "Hades",
+      "history": "survival"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T15:15:08.918369Z",
+    "prefs": {
+      "system": "Nintendo Switch",
+      "genres": [
+        "Indie",
+        "Puzzle"
+      ],
+      "favorite_game": "The Witness",
+      "history": "open world, exploration"
+    }
   }
 ]

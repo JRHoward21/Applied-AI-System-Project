@@ -2,18 +2,18 @@ flowchart LR
     user([User])
 
     subgraph presentation[Presentation Layer]
-        ui[Streamlit UI<br/>app.py]
+        ui[Streamlit UI\napp.py]
     end
 
     subgraph application[Application Layer]
-        dcm[Data collection & validation<br/>guardrails.py]
-        re[Recommender<br/>recommender.py]
-        ai[AI explanation layer<br/>ai_layer.py]
-        eval[Evaluation harness<br/>eval.py]
+        dcm[Data collection & validation\nguardrails.py]
+        re[Recommender\nrecommender.py]
+        ai[AI explanation layer\nai_layer.py]
+        eval[Evaluation harness\neval.py]
     end
 
     subgraph data[Data Layer]
-        games[(Local game catalog<br/>games.py)]
+        games[(Local game catalog\ngames.py)]
         examples[Examples folder]
         assets["Assets (diagram, images)"]
     end
