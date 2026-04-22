@@ -1,14 +1,47 @@
 # AI Game Selector Project
 
-AI Game Selector is a compact, extendable project that combines a deterministic, rule-based recommender with an AI explanation and refinement layer to produce personalized, grounded game recommendations.
+## Orginal Base Project
+The original project was a game recommendation system inspired by Twitch and Spotify. Its goal was to help users discover games based on their platform, preferred genres, favorite titles, and gameplay history. The first version relied on rule-based scoring over a structured local game catalog.
 
-Key capabilities
-- Rule-based candidate retrieval from a local game catalog
-- AI explanation layer that produces human-friendly reasoning (local fallback or OpenAI)
-- Input/output guardrails and fallback behavior for reliability
-- Streamlit demo UI and an evaluation harness for batch testing
+## AI Game Selector
+Is a compact, extendable project that combines a deterministic, rule-based recommender with an AI explanation and refinement layer to produce personalized, grounded game recommendations.
 
-What's included in this README
+## Goal of the Extended Project
+This extended version turns the original recommender into an AI-enhanced game recommendation system. It adds:
+- a Streamlit interface for interactive use
+- an AI explanation layer with optional OpenAI API support
+- guardrails for input and output reliability
+- an evaluation harness for repeated testing across multiple user profiles
+
+## How Real Recommendation Systems Work
+Real-world recommendation systems such as Spotify, YouTube, and similar platforms use data about items and users to rank results. In this project, the input data includes game features such as genres, platforms, tags, and gameplay styles. User preferences include the selected platform, genres, favorite game, and a natural-language description of playstyle/history. The recommender compares those inputs against the catalog, scores candidate games, and ranks the strongest matches. The AI layer then improves the explanations so the results are easier to understand and feel more personalized.
+
+## Current System capabilities
+The system:
+- accepts platform, genre, favorite game, and playstyle/history inputs
+- retrieves and ranks candidate games from a structured dataset
+- generates AI-enhanced recommendation explanations
+- validates both inputs and outputs with guardrails
+- falls back to a local explanation layer if an API key is unavailable or the API call fails
+- runs an evaluation script on predefined user profiles
+
+## Substantial AI Feature
+The substantial AI feature is an **AI explanation and refinement layer** integrated directly into the recommendation workflow. After the rule-based recommender selects candidate games, the AI layer interprets the user’s profile and produces personalized explanations grounded in matched features from the catalog.
+
+This changes system behavior meaningfully because the output is no longer just a sorted list of games. Instead, the system produces a profile-aware recommendation response with more detailed, personalized reasoning.
+
+## Reliability / Guardrails
+The system includes:
+- input validation
+- allowed platform and genre checking
+- output validation against the local game catalog
+- fallback behavior if too few valid recommendations are produced
+- fallback AI explanation generation if the OpenAI API is unavailable
+
+These guardrails improve reliability by preventing unsupported inputs, reducing invalid outputs, and ensuring the system still works even if the API path fails.
+
+
+## What's included in this README
 - Quickstart: install, configuration, and run examples
 - System overview and architecture
 - File map and extension points
@@ -50,15 +83,20 @@ Usage examples
 - Streamlit UI: follow the web UI to input platform, genre, favorite titles, and playstyle; the app shows ranked recommendations and AI explanations.
 - Programmatic: import `recommender` and `ai_layer` in a script to produce recommendations and explanations from a profile object.
 
-Architecture (high level)
-- `games.py`: local game catalog and helper utilities
-- `recommender.py`: deterministic candidate selection and scoring
-- `ai_layer.py`: prompt construction, provider client abstraction, and local fallback explainer
-- `guardrails.py`: input validation, whitelist checks, and output verification
-- `app.py`: Streamlit demo and user-facing integration
-- `eval.py`: batch evaluation harness that runs the pipeline for example profiles
+## System Architecture
+The architecture includes:
+- **Streamlit UI (`app.py`)** for collecting user preferences and showing results
+- **Game Catalog (`games.py`)** containing structured metadata about games
+- **Rule-Based Recommender (`recommender.py`)** for retrieval, scoring, and ranking
+- **AI Layer (`ai_layer.py`)** for explanation generation and optional OpenAI enhancement
+- **Guardrails (`guardrails.py`)** for validating input and output
+- **Evaluation Harness (`eval.py`)** for testing the system on multiple example profiles
 
-Project structure
+The architecture diagram is included in:
+- `Assets/visual_system_diagram.mmd`
+- `Assets/visual_system_diagram.png`
+
+## Project Structure
 ```text
 Applied-AI-System-Project/
 │── app.py
@@ -70,13 +108,19 @@ Applied-AI-System-Project/
 │── requirements.txt
 │── README.md
 │
-├── assets/
-│   └── visual_system_diagram.mmd
+├── Assets/
+│   ├── visual_system_diagram.mmd
+│   └── visual_system_diagram.png
 │
-└── examples/
-    ├── example_profiles.py
-    └── sample_outputs.md
-```
+├── examples/
+│   ├── example_profiles.py
+│   └── sample_outputs.md
+│
+└── tests/
+    ├── test_ai_layer.py
+    ├── test_guardrails.py
+    ├── test_history.py
+    └── test_recommender.py
 
 Core components (brief)
 - `app.py`: Streamlit demo / UI entrypoint
