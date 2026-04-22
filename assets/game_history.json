@@ -9,5 +9,122 @@
       "favorite_game": "Call of Duty",
       "history": "shooting, multiplayer"
     }
+  },
+  {
+    "timestamp": "2026-04-22T04:15:13.379772Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:22:05.345349Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:22:11.348783Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:22:18.368136Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:22:23.983765Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:39:08.188159Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Action"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "exploration, hardcore"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:39:56.441875Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "RPG",
+        "Action"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Survival, exploration"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:40:17.493707Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "RPG",
+        "Action"
+      ],
+      "favorite_game": "Shadow of War",
+      "history": "Survival, exploration"
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:42:46.385120Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Adventure"
+      ],
+      "favorite_game": "Minecraft",
+      "history": ""
+    }
+  },
+  {
+    "timestamp": "2026-04-22T04:47:30.019108Z",
+    "prefs": {
+      "system": "PlayStation 5",
+      "genres": [
+        "Adventure"
+      ],
+      "favorite_game": "Minecraft",
+      "history": "exploration, sandbox, action"
+    }
   }
 ]
