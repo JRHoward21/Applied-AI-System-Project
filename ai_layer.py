@@ -57,7 +57,8 @@ def build_catalog_payload(recommendations: List[Dict]) -> List[Dict]:
 
 
 def openai_ai_explanations(user_prefs: Dict, recommendations: List[Dict]) -> List[Dict]:
-    client = OpenAI()
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key) if api_key else OpenAI()
 
     profile_summary = build_profile_summary(user_prefs)
     catalog_payload = build_catalog_payload(recommendations)
@@ -92,8 +93,35 @@ Rules:
         input=prompt,
     )
 
-    text = getattr(response, "output_text", "").strip()
-    parsed = json.loads(text)
+    # Extract text robustly from different SDK response shapes
+    text = ""
+    try:
+        if hasattr(response, "output_text") and response.output_text:
+            text = response.output_text
+        else:
+            output = getattr(response, "output", None)
+            if output:
+                parts = []
+                for item in output:
+                    content = item.get("content", []) if isinstance(item, dict) else []
+                    for c in content:
+                        if isinstance(c, dict) and "text" in c:
+                            parts.append(c["text"])
+                        elif isinstance(c, str):
+                            parts.append(c)
+                text = "\n".join(parts)
+    except Exception:
+        text = ""
+
+    text = (text or "").strip()
+
+    # Try parsing JSON; if it fails, fall back to local explanations
+    try:
+        parsed = json.loads(text)
+        if not isinstance(parsed, list):
+            raise ValueError("parsed response is not a list")
+    except Exception:
+        return local_ai_explanations(user_prefs, recommendations)
 
     reason_map = {
         item["title"]: item["ai_reason"]
@@ -106,8 +134,8 @@ Rules:
         updated = dict(rec)
         updated["rank"] = idx
         updated["ai_reason"] = reason_map.get(
-            rec["title"],
-            f"{rec['title']} is a strong fit based on your selected preferences and matched features."
+            rec.get("title"),
+            f"{rec.get('title', 'This title')} is a strong fit based on your selected preferences and matched features."
         )
         updated["ai_source"] = "openai_api"
         enhanced.append(updated)
